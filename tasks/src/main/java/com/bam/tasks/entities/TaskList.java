@@ -52,6 +52,16 @@ public class TaskList {
         this.created = created;
         this.updated = updated;
     }
+    // @PrePersist
+    // protected void onCreate() {
+    //     this.created = LocalDateTime.now();
+    //     this.updated = LocalDateTime.now();
+    // }
+
+    // @PreUpdate
+    // protected void onUpdate() {
+    //     this.updated = LocalDateTime.now();
+    // }
 
     public UUID getId() {
         return id;
