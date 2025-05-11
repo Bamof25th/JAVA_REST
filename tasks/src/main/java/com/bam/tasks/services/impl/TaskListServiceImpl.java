@@ -12,6 +12,8 @@ import com.bam.tasks.dao.TaskListRepository;
 import com.bam.tasks.entities.TaskList;
 import com.bam.tasks.services.TaskListService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TaskListServiceImpl implements TaskListService {
 
@@ -29,6 +31,7 @@ public class TaskListServiceImpl implements TaskListService {
         return taskListRepository.findAll();
     }
 
+    @Transactional
     @Override
     public TaskList createTaskList(TaskList taskList) {
         if (null != taskList.getId()) {
@@ -53,6 +56,7 @@ public class TaskListServiceImpl implements TaskListService {
         return taskListRepository.findById(id);
     }
 
+    @Transactional
     @Override
     public TaskList updateTaskList(UUID taskListId, TaskList taskList) {
         if (null == taskList.getId()) {
