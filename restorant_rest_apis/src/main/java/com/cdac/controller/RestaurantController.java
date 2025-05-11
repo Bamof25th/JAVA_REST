@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cdac.dto.RestaurantRespDto;
 import com.cdac.entities.Restaurant;
 import com.cdac.service.RestaurantService;
 
@@ -36,7 +37,7 @@ public class RestaurantController {
 	@GetMapping
 	public /* @ResponseBody */ ResponseEntity<?> getAllRestaurants() {
 		System.out.println("in get all restaurants");
-		List<Restaurant> restaurants = restaurantService.getAllRestaurants();
+		List<RestaurantRespDto> restaurants = restaurantService.getAllRestaurants();
 		/*
 		 * in case of no restaurants - SC 204 in case of restaurants - SC 200 + List -
 		 * resp body

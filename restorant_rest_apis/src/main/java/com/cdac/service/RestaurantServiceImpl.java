@@ -2,6 +2,8 @@ package com.cdac.service;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cdac.custom_exceptions.ApiException;
 import com.cdac.custom_exceptions.ResourceNotFoundException;
 import com.cdac.dao.RestaurantDao;
+import com.cdac.dto.RestaurantRespDto;
 import com.cdac.entities.Restaurant;
 
 @Service // => spring bean containing B.L
@@ -18,21 +21,28 @@ public class RestaurantServiceImpl implements RestaurantService {
 	@Autowired
 	private RestaurantDao restaurantDao;
 
-	@Override
-	public List<Restaurant> getAllRestaurants() {
-		return restaurantDao.findAll();
-	}
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
-	public Restaurant getRestaurantDetails(Long restaurantId) {
+	public List<RestaurantRespDto> getAllRestaurants() {
+		List<Restaurant> restaurantList = restaurantDao.findAll();
+		return modelMapper.map(restaurantList, new TypeToken<List<RestaurantRespDto>>() {
+		}.getType());
+	}
+
+	// => valid id , restaurant : persistent
+	// simply access the size of the collection
+	// restaurant.getFoodItems().size();//triggers another select query - food_items
+	@Override
+	public RestaurantRespDto getRestaurantDetails(Long restaurantId) {
 
 		Restaurant restaurant = restaurantDao.findById(restaurantId)
 				.orElseThrow(
 						() -> new ResourceNotFoundException("Invalid Restaurant ID - not found !!!!!"));
-		// => valid id , restaurant : persistent
-		// simply access the size of the collection
-		// restaurant.getFoodItems().size();//triggers another select query - food_items
-		return restaurant;
+		// Manually map nested food items if needed
+		RestaurantRespDto dto = modelMapper.map(restaurant, RestaurantRespDto.class);
+		return dto;
 	}
 
 	@Override
