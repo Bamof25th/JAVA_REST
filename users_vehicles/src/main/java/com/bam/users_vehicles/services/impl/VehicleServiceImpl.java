@@ -30,7 +30,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public ApplicationRes createVehicle(VehicleDto vehicleDto, Long userId) {
 
-        if (null == vehicleDao.findByvName(vehicleDto.getVName())) {
+        if (null != vehicleDao.findByvName(vehicleDto.getVName())) {
             throw new ApplicationException("Vehicle name Already exists");
         }
 
@@ -52,7 +52,7 @@ public class VehicleServiceImpl implements VehicleService {
         Vehicle v = vehicleDao.findById(vId).orElseThrow(
                 () -> new IllegalArgumentException("Unable to find any vehicle with this ID"));
         // establish bi dir also between User 1 <---> * Vehicles
-        user.addVehicle(v);
+        user.removeVehicle(v);
         // no need of explicitly saving Vehicle item entity - due to cascading
 
         return new ApplicationRes("Vehicle Deleted Successfully");
@@ -65,8 +65,8 @@ public class VehicleServiceImpl implements VehicleService {
                 .orElseThrow(() -> new IllegalArgumentException("No user with this id!!!"));
 
         return vehicleDao.findAll().stream()
-        .map(v -> modelMapper.map(v, VehicleDto.class))
-        .toList();
+                .map(v -> modelMapper.map(v, VehicleDto.class))
+                .toList();
     }
 
     @Override
@@ -84,6 +84,18 @@ public class VehicleServiceImpl implements VehicleService {
                 })
                 .toList();
         return res;
+    }
+
+    @Override
+    public ApplicationRes deleteVehicles(Long userId) {
+        User user = userDao.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("User is not registered"));
+
+        // Clear the vehicles list while maintaining the bi-directional relationship
+        user.getVehicles().forEach(vehicle -> vehicle.setUser(null));
+        user.getVehicles().clear();
+
+        return new ApplicationRes("Deleted the whole collection of this user");
     }
 
 }

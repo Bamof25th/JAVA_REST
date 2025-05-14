@@ -16,6 +16,9 @@ public interface VehicleService {
     // Delete vehicles
     ApplicationRes deleteVehicle(Long vId, Long userId);
 
+    // Delete vehicles
+    ApplicationRes deleteVehicles(Long userId);
+
     // Get sold vehicles and user names by date
     List<VehicleDto> getSoldVehiclesByDate(LocalDate date);
 }
