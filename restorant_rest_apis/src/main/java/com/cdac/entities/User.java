@@ -14,14 +14,21 @@ image : byte[]
  * @Id - for PK (unique id property - typically - ref type for easy null 
  * checking) - field level | getter level
  */
-import jakarta.persistence.*;//JPA package
+import java.time.LocalDate;//JPA package
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity // mandatory
 @Table(name = "users") // name of the table
@@ -57,14 +64,14 @@ public class User extends BaseEntity {
 	private Address myAddress;
 	// User HAS-A AdhaarCard , mapping between Entity n single composite embeddable
 	// type
-	@Embedded // totally optional
-	private AdhaarCard card;
+	// @Embedded // totally optional
+	// private AdhaarCard card;
 	// User HAS-A collection of hobbies => collection of basic value type
-	@ElementCollection //mandatory - o.w MappingException
-	@CollectionTable(name="my_hobbies",
-	joinColumns = @JoinColumn(name="user_id"))
-	@Column(length = 50,name="hobby_name")
-	private List<String> hobbies;
+	// @ElementCollection //mandatory - o.w MappingException
+	// @CollectionTable(name="my_hobbies",
+	// joinColumns = @JoinColumn(name="user_id"))
+	// @Column(length = 50,name="hobby_name")
+	// private List<String> hobbies;
 
 	public User(String firstName, String lastName, String email, String password, LocalDate dob, UserRole role) {
 		super();
