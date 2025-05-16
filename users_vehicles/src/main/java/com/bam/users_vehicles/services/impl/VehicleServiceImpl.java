@@ -61,10 +61,10 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public List<VehicleDto> getAllVehicle(Long userId) {
-        userDao.findById(userId)
+       User user = userDao.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No user with this id!!!"));
 
-        return vehicleDao.findAll().stream()
+        return user.getVehicles().stream()
                 .map(v -> modelMapper.map(v, VehicleDto.class))
                 .toList();
     }
@@ -88,6 +88,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public ApplicationRes deleteVehicles(Long userId) {
+        
         User user = userDao.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("User is not registered"));
 
@@ -97,5 +98,7 @@ public class VehicleServiceImpl implements VehicleService {
 
         return new ApplicationRes("Deleted the whole collection of this user");
     }
+
+
 
 }

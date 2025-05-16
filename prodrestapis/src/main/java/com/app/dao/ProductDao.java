@@ -8,5 +8,5 @@ import com.app.entites.Product;
 
 public interface ProductDao extends JpaRepository<Product, Long> {
 
-    Optional<Product    > getProductByName(String name);
+    Optional<Product> getProductByName(String name);
 }
